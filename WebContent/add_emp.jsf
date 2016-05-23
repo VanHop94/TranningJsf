@@ -1,0 +1,113 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:jsflot="http://www.jsflot.org/taglib/jsflot"
+	style="overflow: auto">
+<f:view contentType="text/html">
+	<head>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link rel="stylesheet" type="text/css"
+	href="#{facesContext.externalContext.requestContextPath}/resources/bootstrap/css/bootstrap-theme.min.css" />
+<link rel="stylesheet" type="text/css"
+	href="#{facesContext.externalContext.requestContextPath}/resources/bootstrap/css/bootstrap.min.css" />
+<script
+	src="#{facesContext.externalContext.requestContextPath}/resources/bootstrap/js/bootstrap.min.js"
+	type="text/javascript"></script>
+<title>JSF Tutorial!</title>
+	</head>
+	<body style="margin-top: 100px">
+		<div class="container">
+
+			<a href="add_emp.jsf" class="btn btn-warning btn-lg">Close</a> <a
+				href="add_emp.jsf" class="btn btn-primary btn-lg">New</a> <a
+				href="add_emp.jsf" class="btn btn-danger btn-lg">Abort</a>
+
+			<a4j:form styleClass="form-horizontal" style="margin-top: 20px">
+				<fieldset>
+					<legend>Personal information:</legend>
+					<div class="form-group">
+						<label for="id" class="col-sm-2">Employee Code</label>
+						<div class="col-sm-3">
+							<h:inputText value="#{employee.id}" id="id">
+								<a4j:support event="onchange" action="#{employeeController.insert}" ajaxSingle="true" />
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="name" class="col-sm-2">Employee Name</label>
+						<div class="col-sm-5">
+							<h:inputText value="#{employee.name}" id="name">
+								<a4j:support event="onchange" action="#{employeeController.insert}" ajaxSingle="true" />
+							</h:inputText>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="birdth" class="col-sm-2">Date of birdth</label>
+						<div class="col-sm-5" id="birdth">
+							<rich:calendar styleClass="input-group date" value="#{employee.birdth}">
+								<a4j:support event="onchange" action="#{employeeController.insert}" ajaxSingle="true" />
+							</rich:calendar>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="short_name" class="col-sm-2">Employee Code</label>
+						<div class="col-sm-3">
+							<h:inputText value="#{employee.shortName}" id="short_name">
+								<a4j:support event="onchange" action="#{employeeController.insert}" ajaxSingle="true" />
+							</h:inputText>
+						</div>
+					</div>
+					
+<!-- 					<div class="form-group">
+						<label for="gender" class="col-sm-2">Gender</label>
+						<div class="col-sm-5">
+							<h:selectOneRadio value="#{employee.gender}" converter="javax.faces.Integer">
+								<f:selectItem itemLabel="Male" value="0"/>
+								<f:selectItem itemLabel="Female" value="1"/>
+								<a4j:support event="onchange" ajaxSingle="true" />
+							</h:selectOneRadio>
+						</div>
+					</div> -->
+					
+					<!-- <div class="form-group">
+						<label for="language" class="col-sm-2">Language</label>
+						<div class="col-sm-5">
+							<h:selectManyCheckbox id="language">
+								<f:selectItem itemLabel="English"/>
+								<f:selectItem itemLabel="China"/>
+							</h:selectManyCheckbox>
+						</div>
+					</div>
+					
+					<div class="form-group">
+						<label for="type" class="col-sm-2">Type</label>
+						<div class="col-sm-5" id="type">
+							<h:selectOneMenu>
+								<f:selectItem itemLabel="English"/>
+								<f:selectItem itemLabel="China"/>
+							</h:selectOneMenu>
+						</div>
+					</div> -->
+					
+					<div class="form-group">
+						<label for="address" class="col-sm-2">Address</label>
+						<div class="col-sm-5" id="address">
+							<h:inputText value="#{employee.shortName}" id="address">
+								<a4j:support event="onchange" action="#{employeeController.insert}" ajaxSingle="true" />
+							</h:inputText>
+						</div>
+					</div>
+					
+				</fieldset>
+			</a4j:form>
+		</div>
+	</body>
+</f:view>
+</html>

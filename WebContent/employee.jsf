@@ -1,0 +1,81 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:s="http://jboss.com/products/seam/taglib"
+	xmlns:ui="http://java.sun.com/jsf/facelets"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:jsflot="http://www.jsflot.org/taglib/jsflot"
+	style="overflow: auto">
+<f:view contentType="text/html">
+	<head>
+		<meta name="viewport" content="width=device-width, initial-scale=1" />
+		<link rel="stylesheet" type="text/css"
+			href="#{facesContext.externalContext.requestContextPath}/resources/bootstrap/css/bootstrap-theme.min.css" />
+		<link rel="stylesheet" type="text/css"
+			href="#{facesContext.externalContext.requestContextPath}/resources/bootstrap/css/bootstrap.min.css" />
+		<script
+			src="#{facesContext.externalContext.requestContextPath}/resources/bootstrap/js/bootstrap.min.js"
+			type="text/javascript"></script>
+		<title>JSF Tutorial!</title>
+	</head>
+	<body style="margin-top: 100px">
+		<div class="container">
+			<a href="add_emp.jsf" class="btn btn-primary btn-lg">New</a>
+			<h:form>
+				<rich:dataTable value="#{sumaryController.employees}" var="emp"
+					width="50% !important" styleClass="table">
+					<f:facet name="header">
+						<h:outputText value="List Employees" />
+					</f:facet>
+					<rich:column sortBy="#{emp.id}" filterBy="#{emp.id}"
+						filterEvent="onkeyup" style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Employee Code" />
+						</f:facet>
+						<h:outputText value="#{emp.id}" />
+					</rich:column>
+
+					<rich:column sortBy="#{emp.gender}" style="text-align:center;"
+						filterBy="#{emp.gender == 0 ? 'Male' : 'Female'}"
+						filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="Gender" />
+						</f:facet>
+						<h:outputText value="#{emp.gender == 0 ? 'Male' : 'Female'}" />
+					</rich:column>
+
+					<rich:column sortBy="#{emp.birdth}" filterBy="#{emp.birdth}"
+						filterEvent="onkeyup" style="text-align:center;">
+						<f:facet name="header">
+							<h:outputText value="Birdth Day" />
+						</f:facet>
+						<h:outputText value="#{emp.birdth}" />
+					</rich:column>
+
+					<rich:column sortBy="#{emp.name}" filterBy="#{emp.name}"
+						style="text-align:center;" filterEvent="onkeyup">
+						<f:facet name="header">
+							<h:outputText value="Name" />
+						</f:facet>
+						<h:outputText value="#{emp.name}" />
+					</rich:column>
+				</rich:dataTable>
+			</h:form>
+
+			<!-- <nav>
+  <ul class="pagination">
+    <li><span aria-hidden="true">«</span></li>
+    <li><a href="#">1<span class="sr-only">(current)</span></a></li>
+    <li><a href="">2</a></li>
+    <li><a href="#">3</a></li>
+    <li><a href="#">4</a></li>
+    <li><a href="#">5</a></li>
+    <li><a href="#" aria-label="Next"><span aria-hidden="true">»</span></a></li>
+  </ul>
+</nav> -->
+		</div>
+	</body>
+
+</f:view>
+</html>
