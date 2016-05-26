@@ -5,22 +5,37 @@ import java.util.Date;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 import org.jboss.seam.annotations.Name;
 
 @Entity
 @Name(value = "employee")
-@Table(name = "employee")
-@NamedQueries({ @NamedQuery(name = "getEmployees", query = "SELECT e " + "FROM Employee e") })
+@Table(name = "demo_alex_employee")
+@NamedQueries({ @NamedQuery(name = "getEmployees", query = "SELECT e " + "FROM Employee e"),
+		// @NamedQuery(name = "filterEmployee", query = "SELECT e FROM Employee
+		// e where e.empCode LIKE :id AND e.name LIKE :name AND e.birdth LIKE
+		// :birdth AND e.gender LIKE :gender"),
+		@NamedQuery(name = "filterEmployee", query = "SELECT e FROM Employee e where LOWER(e.empCode) LIKE :code AND LOWER(e.name) LIKE :name AND (e.gender = :gender1 OR e.gender = :gender2) AND e.status = :status"),
+		@NamedQuery(name = "countEmployee", query = "SELECT count(e.id) FROM Employee e where LOWER(e.empCode) LIKE :code AND LOWER(e.name) LIKE :name AND (e.gender = :gender1 OR e.gender = :gender2) AND e.status = :status"),
+		@NamedQuery(name = "findByCode", query = "SELECT e FROM Employee e where e.empCode = :code")
+
+})
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
 
 	@Id
-	private String id;
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private Integer id;
+
+	@Column(name = "emp_code", unique = true)
+	private String empCode;
 
 	@Column(name = "name")
 	private String name;
@@ -35,57 +50,108 @@ public class Employee implements Serializable {
 	private Integer gender; // 0 = male, 1 = female
 
 	@Column(name = "is_english_language")
-	private boolean isEnlishLanguage; // 0 = false, 1 = true
+	private boolean hasEnglishLanguage; // 0 = false, 1 = true
 
 	@Column(name = "is_china_language")
-	private boolean isChinaLanguage; // the same above
+	private boolean hasChinaLanguage; // the same above
 
 	@Column(name = "type")
 	private int type; // 0 = Domestic, 1 = Commercial, 2 = Dealer
 
 	@Column(name = "address")
 	private String address;
-	
+
+	@Column(name = "status")
 	private int status;
 
 	public Employee() {
-		super();
 	}
 
-	public Employee(String id, String name, Date birdth, String shortName, Integer gender, boolean isEnlishLanguage,
-			boolean isChinaLanguage, int type, String address) {
+	@SuppressWarnings("deprecation")
+	public Employee(boolean isInit) {
+		super();
+		if (isInit) {
+			empCode = "";
+			name = "";
+			birdth = new Date(1990 - 1900, 0, 1);
+			shortName = "";
+			gender = 0;
+			hasEnglishLanguage = false;
+			hasChinaLanguage = false;
+			type = 0;
+			address = "";
+			status = 0;
+		}
+	}
+
+	public Employee(Integer id, String empCode, String name, Date birdth, String shortName, Integer gender,
+			boolean hasEnglishLanguage, boolean hasChinaLanguage, int type, String address, int status) {
 		super();
 		this.id = id;
+		this.empCode = empCode;
 		this.name = name;
 		this.birdth = birdth;
 		this.shortName = shortName;
 		this.gender = gender;
-		this.isEnlishLanguage = isEnlishLanguage;
-		this.isChinaLanguage = isChinaLanguage;
-		this.type = type;
-		this.address = address;
-
-	}
-
-	public Employee(String name, Date birdth, String shortName, Integer gender, boolean isEnlishLanguage,
-			boolean isChinaLanguage, int type, String address, int status) {
-		super();
-		this.name = name;
-		this.birdth = birdth;
-		this.shortName = shortName;
-		this.gender = gender;
-		this.isEnlishLanguage = isEnlishLanguage;
-		this.isChinaLanguage = isChinaLanguage;
+		this.hasEnglishLanguage = hasEnglishLanguage;
+		this.hasChinaLanguage = hasChinaLanguage;
 		this.type = type;
 		this.address = address;
 		this.status = status;
 	}
 
-	public String getId() {
+	public Employee(String empCode, String name, Date birdth, String shortName, Integer gender,
+			boolean hasEnglishLanguage, boolean hasChinaLanguage, int type, String address, int status) {
+		super();
+		this.empCode = empCode;
+		this.name = name;
+		this.birdth = birdth;
+		this.shortName = shortName;
+		this.gender = gender;
+		this.hasEnglishLanguage = hasEnglishLanguage;
+		this.hasChinaLanguage = hasChinaLanguage;
+		this.type = type;
+		this.address = address;
+		this.status = status;
+	}
+
+	public boolean isHasEnglishLanguage() {
+		return hasEnglishLanguage;
+	}
+
+	public void setHasEnglishLanguage(boolean hasEnglishLanguage) {
+		this.hasEnglishLanguage = hasEnglishLanguage;
+	}
+
+	public boolean isHasChinaLanguage() {
+		return hasChinaLanguage;
+	}
+
+	public void setHasChinaLanguage(boolean hasChinaLanguage) {
+		this.hasChinaLanguage = hasChinaLanguage;
+	}
+
+	public String getEmpCode() {
+		return empCode;
+	}
+
+	public void setEmpCode(String empCode) {
+		this.empCode = empCode;
+	}
+
+	public int getStatus() {
+		return status;
+	}
+
+	public void setStatus(int status) {
+		this.status = status;
+	}
+
+	public Integer getId() {
 		return id;
 	}
 
-	public void setId(String id) {
+	public void setId(Integer id) {
 		this.id = id;
 	}
 
@@ -121,22 +187,6 @@ public class Employee implements Serializable {
 		this.gender = gender;
 	}
 
-	public boolean isEnlishLanguage() {
-		return isEnlishLanguage;
-	}
-
-	public void setEnlishLanguage(boolean isEnlishLanguage) {
-		this.isEnlishLanguage = isEnlishLanguage;
-	}
-
-	public boolean isChinaLanguage() {
-		return isChinaLanguage;
-	}
-
-	public void setChinaLanguage(boolean isChinaLanguage) {
-		this.isChinaLanguage = isChinaLanguage;
-	}
-
 	public int getType() {
 		return type;
 	}
@@ -151,6 +201,13 @@ public class Employee implements Serializable {
 
 	public void setAddress(String address) {
 		this.address = address;
+	}
+	
+	public boolean isValidInfo(){
+		
+		if(empCode.length() == 0 || name.length() == 0 || address.length() == 0 || shortName.length() == 0)
+			return false;
+		return true;
 	}
 
 }

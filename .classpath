@@ -40,5 +40,6 @@
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/geronimo-jta_1.1_spec-1.1.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/serp-1.13.1.jar"/>
 	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/openjpa-2.0.2-20140911.034830-86.jar"/>
+	<classpathentry kind="lib" path="WebContent/WEB-INF/lib/db2jcc.jar"/>
 	<classpathentry kind="output" path="build/classes"/>
 </classpath>

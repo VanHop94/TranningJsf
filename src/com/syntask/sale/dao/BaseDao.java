@@ -6,13 +6,16 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.PersistenceContext;
-import javax.persistence.PersistenceContextType;
+import javax.persistence.EntityManagerFactory;
+import javax.persistence.FlushModeType;
+import javax.persistence.Persistence;
+
+import com.syntask.sale.entity.Employee;
 
 public abstract class BaseDao<PK extends Serializable, T> implements Serializable {
 
-	private final Class<T> persistentClass;
-	private static final long serialVersionUID = 1L;
+	protected final Class<T> persistentClass;
+	protected static final long serialVersionUID = 1L;
 
 	@SuppressWarnings("unchecked")
 	public BaseDao() {
@@ -29,36 +32,36 @@ public abstract class BaseDao<PK extends Serializable, T> implements Serializabl
 		persistentClass = ((Class) ((Class) genericSuperclass_.getActualTypeArguments()[1]));
 	}
 
-	// private EntityManagerFactory factory =
-	// Persistence.createEntityManagerFactory("entityManagerFactory");
-	 @PersistenceContext(unitName = "entityManagerFactory", type = PersistenceContextType.EXTENDED)
-	private EntityManager entityManager;
-
-	protected EntityManager getEntityManager() {
-		/*
-		 * if(entityManager == null) entityManager =
-		 * factory.createEntityManager();
-		 * 
-		 * if(!entityManager.getTransaction().isActive())
-		 * entityManager.getTransaction().begin();
-		 */
-
-		return entityManager;
-	}
+	protected EntityManagerFactory factory = Persistence.createEntityManagerFactory("entityManagerFactory");
+	protected EntityManager entityManager;
 
 	public T findById(PK id) {
-		getEntityManager().find(persistentClass, id);
-		return (T) getEntityManager().find(persistentClass, id);
+		List<T> datas =  getEntityManager().createNamedQuery("findByCode", persistentClass).setParameter("code", id).getResultList();
+		if(datas.size() > 0)
+			return datas.get(0);
+		return null;
+	}
+
+	protected EntityManager getEntityManager() {
+
+		if (entityManager == null)
+			entityManager = factory.createEntityManager();
+
+		if (!entityManager.getTransaction().isActive())
+			entityManager.getTransaction().begin();
+
+		return entityManager;
 	}
 
 	public void persist(T entity) {
 		getEntityManager().persist(entity);
 		getEntityManager().flush();
-		// zgetEntityManager().getTransaction().commit();
+		getEntityManager().getTransaction().commit();
 	}
 
 	public void delete(T entity) {
 		getEntityManager().remove(entity);
+		getEntityManager().getTransaction().commit();
 	}
 
 	public List<T> getEntities(int pageSize, int pageIndex) {
@@ -68,13 +71,10 @@ public abstract class BaseDao<PK extends Serializable, T> implements Serializabl
 
 	}
 
-	/*
-	 * public PK insert(T entity) { return (PK) getEntityManager().(entity); }
-	 */
-
 	public void update(T entity) {
 		getEntityManager().refresh(entity);
 		getEntityManager().flush();
+		getEntityManager().getTransaction().commit();
 	}
 
 }

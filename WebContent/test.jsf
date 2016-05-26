@@ -1,0 +1,44 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" 
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+	xmlns:h="http://java.sun.com/jsf/html"
+	xmlns:a4j="http://richfaces.org/a4j"
+	xmlns:rich="http://richfaces.org/rich"
+	xmlns:f="http://java.sun.com/jsf/core"
+	xmlns:ui="http://java.sun.com/jsf/facelets">
+
+<head>
+<style>
+.rich-mpnl-body {
+	text-align: center
+}
+</style>
+</head>
+
+<body>
+	<h:form>
+		<h:outputText value="Text:" />
+		<h:inputText />
+		<a4j:commandButton value="Save"
+			onclick="#{rich:component('confirmation')}.show();return false" />
+
+<!-- 		<a4j:jsFunction name="submit" /> -->
+	</h:form>
+
+	<rich:modalPanel id="confirmation" width="250" height="150">
+		<f:facet name="header">Confirmation</f:facet>
+		<h:panelGrid>
+			<h:panelGrid columns="2">
+				<h:graphicImage value="/alert.png" />
+				<h:outputText value="Are you sure?" style="FONT-SIZE: large;" />
+			</h:panelGrid>
+			<h:panelGroup>
+				<input type="button" value="OK"
+					onclick="#{rich:component('confirmation')}.hide();submit();return false" />
+				<input type="button" value="Cancel"
+					onclick="#{rich:component('confirmation')}.hide();return false" />
+			</h:panelGroup>
+		</h:panelGrid>
+	</rich:modalPanel>
+</body>
+</html>

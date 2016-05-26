@@ -19,12 +19,12 @@
 	</application>
 
 	<converter>
-		<converter-id>demoCustom</converter-id>
-		<converter-class>com.synertex.demo.custom.DemoCustomConverter</converter-class>
+		<converter-id>converter</converter-id>
+		<converter-class>com.syntask.sale.util.CustomConverter</converter-class>
 	</converter>
 
 	<validator>
-		<validator-id>demoValidate</validator-id>
-		<validator-class>com.synertex.demo.custom.DemoCustomValidator</validator-class>
+		<validator-id>validate</validator-id>
+		<validator-class>com.syntask.sale.util.CustomValidator</validator-class>
 	</validator>
 </faces-config>

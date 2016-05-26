@@ -14,6 +14,11 @@ import com.syntask.sale.service.EmployeeService;
 @Name(value = "employeeService")
 public class EmployeeServiceImpl implements EmployeeService {
 
+	@Override
+	public Employee findById(String id) {
+		return null;
+	}
+
 	//@In(value = "employeeDao", create = true)
 	private EmployeeDao employeeDao;
 	
@@ -23,7 +28,7 @@ public class EmployeeServiceImpl implements EmployeeService {
 	}
 
 	public List<Employee> getEmployees(int pageSize, int pageIndex) {
-		return employeeDao.getEmployees(pageSize, pageIndex);
+		return null;//employeeDao.getEmployees(pageSize, pageIndex);
 	}
 
 	@Override
