@@ -11,21 +11,18 @@ import javax.persistence.Id;
 import javax.persistence.NamedQueries;
 import javax.persistence.NamedQuery;
 import javax.persistence.Table;
-import javax.persistence.Transient;
 
 import org.jboss.seam.annotations.Name;
+
+import com.syntask.sale.util.Constains;
 
 @Entity
 @Name(value = "employee")
 @Table(name = "demo_alex_employee")
 @NamedQueries({ @NamedQuery(name = "getEmployees", query = "SELECT e " + "FROM Employee e"),
-		// @NamedQuery(name = "filterEmployee", query = "SELECT e FROM Employee
-		// e where e.empCode LIKE :id AND e.name LIKE :name AND e.birdth LIKE
-		// :birdth AND e.gender LIKE :gender"),
-		@NamedQuery(name = "filterEmployee", query = "SELECT e FROM Employee e where LOWER(e.empCode) LIKE :code AND LOWER(e.name) LIKE :name AND (e.gender = :gender1 OR e.gender = :gender2) AND e.status = :status"),
-		@NamedQuery(name = "countEmployee", query = "SELECT count(e.id) FROM Employee e where LOWER(e.empCode) LIKE :code AND LOWER(e.name) LIKE :name AND (e.gender = :gender1 OR e.gender = :gender2) AND e.status = :status"),
-		@NamedQuery(name = "findByCode", query = "SELECT e FROM Employee e where e.empCode = :code")
-
+				@NamedQuery(name = "filterEmployee", query = "SELECT e FROM Employee e where LOWER(e.empCode) LIKE :code AND LOWER(e.name) LIKE :name AND (e.gender = :gender1 OR e.gender = :gender2) AND e.status = :status ORDER BY :orderBy ASC"),
+				@NamedQuery(name = "countEmployee", query = "SELECT count(e.id) FROM Employee e where LOWER(e.empCode) LIKE :code AND LOWER(e.name) LIKE :name AND (e.gender = :gender1 OR e.gender = :gender2) AND e.status = :status"),
+				@NamedQuery(name = "findByCode", query = "SELECT e FROM Employee e where e.empCode = :code"),
 })
 public class Employee implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -34,7 +31,7 @@ public class Employee implements Serializable {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer id;
 
-	@Column(name = "emp_code", unique = true)
+	@Column(name = "emp_code")
 	private String empCode;
 
 	@Column(name = "name")
@@ -50,13 +47,13 @@ public class Employee implements Serializable {
 	private Integer gender; // 0 = male, 1 = female
 
 	@Column(name = "is_english_language")
-	private boolean hasEnglishLanguage; // 0 = false, 1 = true
+	private Boolean hasEnglishLanguage; // 0 = false, 1 = true
 
 	@Column(name = "is_china_language")
-	private boolean hasChinaLanguage; // the same above
+	private Boolean hasChinaLanguage; // the same above
 
 	@Column(name = "type")
-	private int type; // 0 = Domestic, 1 = Commercial, 2 = Dealer
+	private Integer type; // 0 = Domestic, 1 = Commercial, 2 = Dealer
 
 	@Column(name = "address")
 	private String address;
@@ -73,14 +70,14 @@ public class Employee implements Serializable {
 		if (isInit) {
 			empCode = "";
 			name = "";
-			birdth = new Date(1990 - 1900, 0, 1);
+			//birdth = new Date(1990 - 1900, 0, 1);
 			shortName = "";
-			gender = 0;
-			hasEnglishLanguage = false;
-			hasChinaLanguage = false;
-			type = 0;
+			//gender = 0;
+			//hasEnglishLanguage = false;
+			//hasChinaLanguage = false;
+			//type = 0;
 			address = "";
-			status = 0;
+			status = Constains.EMP.DRAFF_STATUS;
 		}
 	}
 
@@ -116,6 +113,8 @@ public class Employee implements Serializable {
 	}
 
 	public boolean isHasEnglishLanguage() {
+		if(hasEnglishLanguage == null)
+			return false;
 		return hasEnglishLanguage;
 	}
 
@@ -124,6 +123,9 @@ public class Employee implements Serializable {
 	}
 
 	public boolean isHasChinaLanguage() {
+		if(hasChinaLanguage == null)
+			return false;
+		
 		return hasChinaLanguage;
 	}
 
@@ -180,6 +182,8 @@ public class Employee implements Serializable {
 	}
 
 	public Integer getGender() {
+		if(gender == null)
+			return 0;
 		return gender;
 	}
 
@@ -188,6 +192,8 @@ public class Employee implements Serializable {
 	}
 
 	public int getType() {
+		if(type == null)
+			return 0;
 		return type;
 	}
 

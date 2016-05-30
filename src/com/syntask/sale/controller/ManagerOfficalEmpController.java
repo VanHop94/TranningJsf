@@ -4,13 +4,15 @@ import org.jboss.seam.ScopeType;
 import org.jboss.seam.annotations.Name;
 import org.jboss.seam.annotations.Scope;
 
+import com.syntask.sale.util.Constains;
+
 @Name(value = "managerOfficalEmpController")
 @Scope(ScopeType.CONVERSATION)
 public class ManagerOfficalEmpController extends ManagerEmployeeController{
 
 	@Override
 	public void init() {
-		status = 1;
+		status = Constains.EMP.OUTSTANDING_STATUS;
 	}
 
 

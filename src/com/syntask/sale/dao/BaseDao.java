@@ -6,11 +6,8 @@ import java.lang.reflect.Type;
 import java.util.List;
 
 import javax.persistence.EntityManager;
-import javax.persistence.EntityManagerFactory;
-import javax.persistence.FlushModeType;
-import javax.persistence.Persistence;
 
-import com.syntask.sale.entity.Employee;
+import org.jboss.seam.annotations.In;
 
 public abstract class BaseDao<PK extends Serializable, T> implements Serializable {
 
@@ -19,7 +16,7 @@ public abstract class BaseDao<PK extends Serializable, T> implements Serializabl
 
 	@SuppressWarnings("unchecked")
 	public BaseDao() {
-		Class obtainedClass = getClass();
+		Class<?> obtainedClass = getClass();
 		Type genericSuperclass = null;
 		for (;;) {
 			genericSuperclass = obtainedClass.getGenericSuperclass();
@@ -29,52 +26,35 @@ public abstract class BaseDao<PK extends Serializable, T> implements Serializabl
 			obtainedClass = obtainedClass.getSuperclass();
 		}
 		ParameterizedType genericSuperclass_ = (ParameterizedType) genericSuperclass;
-		persistentClass = ((Class) ((Class) genericSuperclass_.getActualTypeArguments()[1]));
+		persistentClass = ((Class<T>) ((Class<T>) genericSuperclass_.getActualTypeArguments()[1]));
+		
 	}
-
-	protected EntityManagerFactory factory = Persistence.createEntityManagerFactory("entityManagerFactory");
+	
+	@In
 	protected EntityManager entityManager;
 
 	public T findById(PK id) {
-		List<T> datas =  getEntityManager().createNamedQuery("findByCode", persistentClass).setParameter("code", id).getResultList();
-		if(datas.size() > 0)
-			return datas.get(0);
-		return null;
+		return entityManager.find(persistentClass, id);
 	}
-
-	protected EntityManager getEntityManager() {
-
-		if (entityManager == null)
-			entityManager = factory.createEntityManager();
-
-		if (!entityManager.getTransaction().isActive())
-			entityManager.getTransaction().begin();
-
-		return entityManager;
-	}
+	
 
 	public void persist(T entity) {
-		getEntityManager().persist(entity);
-		getEntityManager().flush();
-		getEntityManager().getTransaction().commit();
+		entityManager.persist(entity);
 	}
 
 	public void delete(T entity) {
-		getEntityManager().remove(entity);
-		getEntityManager().getTransaction().commit();
+		entityManager.remove(entity);
 	}
 
 	public List<T> getEntities(int pageSize, int pageIndex) {
 
-		return getEntityManager().createQuery("Select o from " + persistentClass.getName() + " o", persistentClass)
+		return entityManager.createQuery("Select o from " + persistentClass.getName() + " o", persistentClass)
 				.setFirstResult((pageIndex - 1) * pageSize).setMaxResults(pageSize).getResultList();
 
 	}
 
-	public void update(T entity) {
-		getEntityManager().refresh(entity);
-		getEntityManager().flush();
-		getEntityManager().getTransaction().commit();
+	public void update(T entity) throws Exception{
+		entityManager.refresh(entity);
 	}
 
 }

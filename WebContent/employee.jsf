@@ -24,6 +24,9 @@
 			.rich-mpnl-content{
 				border-style: hidden !important;
 			}
+			.rich-message-label{
+				color: red;
+			}
 		</style>
 		<rich:modalPanel id="confirmation" autosized="true">
 			<div class="modal-dialog">
@@ -37,9 +40,8 @@
 			      	</div>
 			      	<div class="modal-footer">
 			        	<button type="button" class="btn btn-default" data-dismiss="modal" onclick="#{rich:component('confirmation')}.hide();return false">Cancel</button>
-			        	<h:form>
+			        	<h:form style="display: inline;">
 			        		<h:commandButton  action="#{employeeController.delete}" value="Yes" styleClass="btn btn-primary"/>
-<!-- 			        		<button type="button" class="btn btn-primary" data-dismiss="modal" onclick="#{rich:component('confirmation')}.hide();document.getElementById('delete').;return false">Yes</button> -->
 			        	</h:form>
 			      	</div>
 		    	</div>
@@ -50,8 +52,8 @@
 		<!-- content -->
 		<div class="container">
 			<a4j:form styleClass="form-horizontal" style="margin-top: 20px" id="form">
-				<a href="sumary.jsf" class="btn btn-warning btn-lg" style="margin-right: 5px">Close</a> 
-				<a4j:commandButton value="New" styleClass="btn btn-primary btn-lg" style="margin-right: 5px" actionListener="#{employeeController.createNewEmployee}" reRender="code,address,birdth,name,short_name,type,ch,en,code,gender"/>
+				<a href="sumary.jsf" class="btn btn-warning btn-lg" style="margin-right: 5px">Close</a>
+				<a href="employee.jsf" class="btn btn-primary btn-lg" style="margin-right: 5px">New</a> 
 				<a4j:commandButton value="Abort" onclick="#{rich:component('confirmation')}.show();return false" style="margin-right: 5px" id="delete" styleClass="btn btn-danger btn-lg"/>
 				<br/>
 				<fieldset style="margin-top: 10px">
@@ -88,7 +90,8 @@
 						<label for="birdth" class="col-sm-2">Date of birdth</label>
 						<div class="col-sm-4">
 							<rich:calendar styleClass="input-group date" id="birdth"
-								value="#{employeeController.employee.birdth}" validator="validate" disabled= "#{fn:length(employeeController.employee.empCode) lt 3}">
+								value="#{employeeController.employee.birdth}" disabled= "#{fn:length(employeeController.employee.empCode) lt 3}">
+								<f:validator validatorId="validate"/>
 								<a4j:support event="onchanged"
 									action="#{employeeController.update}" ajaxSingle="true" limitToList="true" reRender="err_birdth" />
 							</rich:calendar>

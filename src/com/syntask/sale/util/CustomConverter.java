@@ -47,6 +47,7 @@ public class CustomConverter implements Converter {
 		return arg2;
 	}
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public String getAsString(FacesContext arg0, UIComponent component, Object data) {
 		if (data instanceof Date) {

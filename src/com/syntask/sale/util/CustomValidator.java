@@ -1,8 +1,6 @@
 package com.syntask.sale.util;
 
 import java.util.Date;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 import javax.faces.application.FacesMessage;
 import javax.faces.component.UIComponent;
@@ -16,9 +14,9 @@ import com.syntask.sale.dao.EmployeeDao;
 
 public class CustomValidator implements Validator {
 
+	@SuppressWarnings("deprecation")
 	@Override
 	public void validate(FacesContext arg0, UIComponent component, Object input) throws ValidatorException {
-		// TODO Auto-generated method stub
 
 		switch (component.getId()) {
 		case "code":
@@ -27,7 +25,7 @@ public class CustomValidator implements Validator {
 				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Length of code is at least 3"));
 			
 			EmployeeDao employeeDao = (EmployeeDao) Component.getInstance("employeeDao");
-			if(employeeDao.findEmployee(input.toString()) != null)
+			if(employeeDao.findByCodeEmp(input.toString()) != null)
 				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Employee is exist"));
 			
 			break;
@@ -48,8 +46,8 @@ public class CustomValidator implements Validator {
 			break;
 
 		case "short_name":
-			if(input.toString().length() < 3 || input.toString().length() > 20)
-				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Length of short name is from 3 -> 20 character"));
+			if(input.toString().length() < 2 || input.toString().length() > 20)
+				throw new ValidatorException(new FacesMessage(FacesMessage.SEVERITY_ERROR, "", "Length of short name is from 2 -> 20 character"));
 			
 			break;
 

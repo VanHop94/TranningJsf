@@ -16,9 +16,18 @@ public abstract class ManagerEmployeeController {
 
 	protected List<Employee> employees;
 	protected EmployeeFilter empFilter;
+	protected String orderBy;
 	protected int status;
 	protected EmployeeDao employeeDao;
 	protected Page page;
+	
+	public String getOrderBy() {
+		return orderBy;
+	}
+
+	public void setOrderBy(String orderBy) {
+		this.orderBy = orderBy;
+	}
 
 	public EmployeeFilter getEmpFilter() {
 		return empFilter;
@@ -45,22 +54,53 @@ public abstract class ManagerEmployeeController {
 		employeeDao = (EmployeeDao) Component.getInstance("employeeDao");
 		empFilter = new EmployeeFilter();
 		page = new Page();
-		employees = getEmployees(page.getFirstPage());
-		page.setNumOfPage((int) (employeeDao.numOfEmployee(empFilter, status) / page.getPageSize()));
-		page.setLastPage(page.getNumOfPage());
+		orderBy = "emp_code";
+		int numOfEmp = (int) employeeDao.numOfEmployee(empFilter, status);
+		page.setNumOfPage(numOfEmp / page.getPageSize() + (numOfEmp % page.getPageSize() == 0 ? 0 : 1));
+		getDataAtPage(page.getFirstPage());
 	}
 
 	@Destroy
 	public void destroy() {
 		Conversation.instance().end();
 	}
-
-	public List<Employee> getEmployees(int pageIndex) {
-		return employeeDao.getEmployees(page.getPageSize(), pageIndex, status);
-	}
-
+	
 	public void filter() {
-		employees = employeeDao.filterEmp(empFilter, page, status);
+		page.setCurrentPage(page.getFirstPage());
+		employees = employeeDao.filterEmp(empFilter, page, orderBy, status);
+		int numOfEmp = (int) employeeDao.numOfEmployee(empFilter, status);
+		page.setNumOfPage(numOfEmp / page.getPageSize() + (numOfEmp % page.getPageSize() == 0 ? 0 : 1));
 	}
+	
+	public void nextPage(){
+		page.setCurrentPage(page.getCurrentPage() + 1);
+		getDataAtPage(page.getCurrentPage());
+	}
+	
+	public void previousPage(){
+		page.setCurrentPage(page.getCurrentPage() - 1);
+		getDataAtPage(page.getCurrentPage());
+	}
+	
+	public void firstPage(){
+		getDataAtPage(page.getFirstPage());
+	}
+	
+	public void lastPage(){
+		getDataAtPage(page.getLastPage());
+	}
+	
+	public void getDataAtPage(int pageIndex){
+		page.setCurrentPage(pageIndex);
+		employees = employeeDao.filterEmp(empFilter, page, orderBy, status);
+	}
+	
+/*	public List<Employee> getEmployees(int pageIndex) {
+		return employeeDao.getEmployees(page.getPageSize(), pageIndex, status);
+	}*/
 
+	public Page getPage() {
+		return page;
+	}
+	
 }
